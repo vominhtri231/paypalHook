@@ -1,0 +1,54 @@
+{
+	"id": "WH-0BN93889V1674820X-47Y49208T9581160K",
+	"create_time": "2020-09-20T06:35:34.160Z",
+	"resource_type": "sale",
+	"event_type": "PAYMENT.SALE.PENDING",
+	"summary": "Payment pending for AUD 115.0 AUD",
+	"resource": {
+		"reason_code": "RECEIVING_PREFERENCE_MANDATES_MANUAL_ACTION",
+		"billing_agreement_id": "I-M7T16HXWA27J",
+		"amount": {
+			"total": "115.00",
+			"currency": "AUD",
+			"details": {
+				"subtotal": "115.00"
+			}
+		},
+		"payment_mode": "INSTANT_TRANSFER",
+		"update_time": "2020-09-20T06:34:46Z",
+		"create_time": "2020-09-20T06:34:46Z",
+		"protection_eligibility_type": "ITEM_NOT_RECEIVED_ELIGIBLE,UNAUTHORIZED_PAYMENT_ELIGIBLE",
+		"protection_eligibility": "ELIGIBLE",
+		"links": [
+			{
+				"method": "GET",
+				"rel": "self",
+				"href": "https://api.sandbox.paypal.com/v1/payments/sale/30D7788414781802G"
+			},
+			{
+				"method": "POST",
+				"rel": "refund",
+				"href": "https://api.sandbox.paypal.com/v1/payments/sale/30D7788414781802G/refund"
+			}
+		],
+		"id": "30D7788414781802G",
+		"state": "pending",
+		"invoice_number": ""
+	},
+	"status": "SUCCESS",
+	"links": [
+		{
+			"href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-0BN93889V1674820X-47Y49208T9581160K",
+			"rel": "self",
+			"method": "GET",
+			"encType": "application/json"
+		},
+		{
+			"href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-0BN93889V1674820X-47Y49208T9581160K/resend",
+			"rel": "resend",
+			"method": "POST",
+			"encType": "application/json"
+		}
+	],
+	"event_version": "1.0"
+}

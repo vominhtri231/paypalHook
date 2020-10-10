@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<div id="pay-button-container"></div>
+<div id="subscription-button-container"></div>
+
+<script>
+  const PAYPAL_BASIC_TOKEN = "QVhZV0F1VkhiNmZrckNmNWo1TkhoLTBPbXNyQWF4UFI2VlV6MERBR2ZKbzRaQXZiRnpCYmVoRG1MTXdRMGZMVDJfc1FCTG16VFlUNFBfNmM6RU40eVNHdWxocEFRNDZibEE0dndfVEFSa0RyVGs5QW1ub0JLVDhQNWNrT0lXaThqQkxIMWtQSFJNSHpEUWJZYnhLOF9NMVpMUzlXSUMxcHA=";
+  const PAYPAL_CLIENT_ID = "AcV6SDgINv3Q_0AADLtjSedYEhMAMcISOME6E8uGPzav3tc03roN_1pNVTHlaX35y3AhCf2xJP1i7lX7";
+  const BASE_PAYPAL_API = "https://api.sandbox.paypal.com";
+  // need to create one at {BASE_PAYPAL_API}/billing/plans/plan/create/create-product
+  const SUBSCRIPTION_PRODUCT = "PROD-09B05145J4290842L";
+  const NOT_ALLOW_DECIMAL_CURRENCY = ['HUF', 'JPY', 'TWD'];
+
+  const REDIRECT_PAGE = "https://www.google.com/";
+  const PRODUCT_SHEET_ID = '1KJdM8NY-y5Su_OJ0EWpYZNSbafj27jJGT9vRzuudZpQ';
+  const GG_API_KEY = 'AIzaSyCV8HTl6xXjUXJEuyra9F7WGsqUoijpN0c';
+  const HOOK_URL = "https://script.google.com/macros/s/AKfycbxLvLCtfS_diXAGBRor8r8MERG-gigGvpKMGnyczp-6Sl1tm2w/exec";
+
+  function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
+
+  function redirectAfterPay() {
+    window.location.replace(REDIRECT_PAGE);
+  }
+
+  async function findMatchProduct(productCode) {
+    if (!productCode) {
+      return;
+    }
+
+    const { values: products } = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${PRODUCT_SHEET_ID}/values/product?key=${GG_API_KEY}`)
+      .then(stream => stream.json());
+
+    return products.find(row => row[0] === productCode);
+  }
+
+  function execute(link, callback, attributes) {
+    const tag = document.createElement("script");
+    tag.src = link;
+    tag.onload = callback;
+    if (!!attributes) {
+      attributes.forEach(attribute => tag.setAttribute(attribute.key, attribute.value));
+    }
+    document.body.appendChild(tag);
+  }
+
+  function renderPayButton({ productCode, price }) {
+    paypal.Buttons({
+      style: {
+        shape: 'rect',
+        color: 'gold',
+        layout: 'vertical',
+        label: 'paypal',
+
+      },
+      createOrder: function (data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: price
+            }
+          }]
+        });
+      },
+      onApprove: function (data, actions) {
+        return actions.order.capture().then(function (details) {
+          execute(getUpdateUrl(details));
+          redirectAfterPay();
+        });
+
+        function getUpdateUrl({ id: orderId }) {
+          return `${HOOK_URL}?productCode=${productCode}&orderId=${orderId}`;
+        }
+      }
+    }).render('#pay-button-container');
+  }
+
+  async function getToken(basicToken) {
+    const urlencoded = new URLSearchParams();
+    urlencoded.append("grant_type", "client_credentials");
+
+    return await fetch(`${BASE_PAYPAL_API}/v1/oauth2/token`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${basicToken}`,
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: urlencoded
+    }).then(response => response.json())
+  }
+
+  async function createSubscriptionPlan({ productCode, cycles, price, currency }, token) {
+    const subscriptionPlanBody = {
+      "product_id": SUBSCRIPTION_PRODUCT,
+      "name": productCode,
+      "status": "ACTIVE",
+      "billing_cycles": [
+        {
+          "frequency": {
+            "interval_unit": "MONTH",
+            "interval_count": 1
+          },
+          "tenure_type": "REGULAR",
+          "sequence": 1,
+          "total_cycles": cycles,
+          "pricing_scheme": {
+            "fixed_price": {
+              "value": getPricePerCycle({ cycles, price, currency }),
+              "currency_code": currency
+            }
+          }
+        }
+      ],
+      "payment_preferences": {}
+    };
+
+    return await fetch(`${BASE_PAYPAL_API}/v1/billing/plans`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(subscriptionPlanBody)
+    }).then(stream => stream.json())
+  }
+
+  function getPricePerCycle({ cycles, price, currency }) {
+    if (NOT_ALLOW_DECIMAL_CURRENCY.includes(currency)) {
+      return Math.ceil(price / cycles);
+    } else {
+      return price / cycles;
+    }
+  }
+
+  async function renderSubscriptionButton(product) {
+    const { access_token: token } = await getToken(PAYPAL_BASIC_TOKEN);
+    const { id: planId } = await createSubscriptionPlan(product, token);
+
+    paypal.Buttons({
+      style: {
+        shape: 'pill',
+        color: 'gold',
+        layout: 'horizontal',
+        label: 'subscribe'
+      },
+      createSubscription: function (data, actions) {
+        return actions.subscription.create({
+          'plan_id': planId
+        });
+      },
+      onApprove: function (data, actions) {
+        redirectAfterPay();
+      }
+    }).render('#subscription-button-container');
+  }
+
+  function renderButtons({ productCode, price, currency, allowSubscription, cycles }) {
+    execute(`https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=${currency}&vault=true`,
+      () => {
+        if (!allowSubscription) {
+          renderPayButton({ productCode, price });
+        } else {
+          renderSubscriptionButton({ productCode, price, currency, cycles });
+        }
+      },
+      [{ key: 'data-sdk-integration-source', value: 'button-factory' }]);
+  }
+
+  async function init() {
+    const productCode = getParam("productCode");
+    const matchProduct = await findMatchProduct(productCode);
+    if (!matchProduct) {
+      return;
+    }
+
+    const cycles = getParam("cycles");
+    const allowSubscription = cycles > 1;
+    const [_, price, currency] = matchProduct;
+    renderButtons({ productCode, price, currency, allowSubscription, cycles });
+  }
+
+  init();
+</script>
+
+</html>

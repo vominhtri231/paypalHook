@@ -1,0 +1,59 @@
+{
+  "id": "WH-3GC16684PG108383R-3H294580YC353145W",
+  "event_version": "1.0",
+  "create_time": "2020-09-23T12:28:19.588Z",
+  "resource_type": "capture",
+  "resource_version": "2.0",
+  "event_type": "PAYMENT.CAPTURE.PENDING",
+  "summary": "Payment pending for JPY 123.0 JPY",
+  "resource": {
+    "amount": {
+      "value": "123",
+      "currency_code": "JPY"
+    },
+    "seller_protection": {
+      "dispute_categories": [
+        "ITEM_NOT_RECEIVED",
+        "UNAUTHORIZED_TRANSACTION"
+      ],
+      "status": "ELIGIBLE"
+    },
+    "update_time": "2020-09-23T12:28:15Z",
+    "create_time": "2020-09-23T12:28:15Z",
+    "final_capture": true,
+    "links": [
+      {
+        "method": "GET",
+        "rel": "self",
+        "href": "https://api.sandbox.paypal.com/v2/payments/captures/7EM31341NY055860K"
+      },
+      {
+        "method": "POST",
+        "rel": "refund",
+        "href": "https://api.sandbox.paypal.com/v2/payments/captures/7EM31341NY055860K/refund"
+      },
+      {
+        "method": "GET",
+        "rel": "up",
+        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/96U225676F8551250"
+      }
+    ],
+    "id": "7EM31341NY055860K",
+    "status_details": {
+      "reason": "RECEIVING_PREFERENCE_MANDATES_MANUAL_ACTION"
+    },
+    "status": "PENDING"
+  },
+  "links": [
+    {
+      "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-3GC16684PG108383R-3H294580YC353145W",
+      "rel": "self",
+      "method": "GET"
+    },
+    {
+      "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-3GC16684PG108383R-3H294580YC353145W/resend",
+      "rel": "resend",
+      "method": "POST"
+    }
+  ]
+}

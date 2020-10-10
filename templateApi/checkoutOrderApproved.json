@@ -1,0 +1,59 @@
+{
+  "create_time": "2020-09-25T05:53:18Z",
+  "purchase_units": [
+    {
+      "reference_id": "default",
+      "amount": {
+        "currency_code": "JPY",
+        "value": "123"
+      },
+      "payee": {
+        "email_address": "sb-ixlne3191888@business.example.com",
+        "merchant_id": "9HRHDZTHR9NZC"
+      },
+      "shipping": {
+        "name": {
+          "full_name": "John Doe"
+        },
+        "address": {
+          "address_line_1": "1 Main St",
+          "admin_area_2": "San Jose",
+          "admin_area_1": "CA",
+          "postal_code": "95131",
+          "country_code": "US"
+        }
+      }
+    }
+  ],
+  "links": [
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/72Y08408NK085872X",
+      "rel": "self",
+      "method": "GET"
+    },
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/72Y08408NK085872X",
+      "rel": "update",
+      "method": "PATCH"
+    },
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/72Y08408NK085872X/capture",
+      "rel": "capture",
+      "method": "POST"
+    }
+  ],
+  "id": "72Y08408NK085872X",
+  "intent": "CAPTURE",
+  "payer": {
+    "name": {
+      "given_name": "John",
+      "surname": "Doe"
+    },
+    "email_address": "sb-h1l6m3283490@personal.example.com",
+    "payer_id": "84A4WBAVQ5LCJ",
+    "address": {
+      "country_code": "US"
+    }
+  },
+  "status": "APPROVED"
+}

@@ -1,0 +1,114 @@
+{
+	"id": "WH-8GW13668TP983531H-86P59138XM295835R",
+	"create_time": "2020-09-20T08:01:08.690Z",
+	"resource_type": "subscription",
+	"event_type": "BILLING.SUBSCRIPTION.ACTIVATED",
+	"summary": "Subscription activated",
+	"resource": {
+		"quantity": "1",
+		"subscriber": {
+			"name": {
+				"given_name": "John",
+				"surname": "Doe"
+			},
+			"email_address": "sb-cax47h3188802@personal.example.com",
+			"payer_id": "D3Y35LBJK354G",
+			"shipping_address": {
+				"address": {
+					"address_line_1": "1 Main St",
+					"admin_area_2": "San Jose",
+					"admin_area_1": "CA",
+					"postal_code": "95131",
+					"country_code": "US"
+				}
+			}
+		},
+		"create_time": "2020-09-20T07:59:26Z",
+		"plan_overridden": false,
+		"shipping_amount": {
+			"currency_code": "AUD",
+			"value": "0.0"
+		},
+		"start_time": "2020-09-20T07:00:00Z",
+		"update_time": "2020-09-20T08:00:45Z",
+		"billing_info": {
+			"outstanding_balance": {
+				"currency_code": "AUD",
+				"value": "0.0"
+			},
+			"cycle_executions": [
+				{
+					"tenure_type": "REGULAR",
+					"sequence": 1,
+					"cycles_completed": 0,
+					"cycles_remaining": 3,
+					"current_pricing_scheme_version": 1,
+					"total_cycles": 3
+				}
+			],
+			"last_payment": {
+				"amount": {
+					"currency_code": "AUD",
+					"value": "115.0"
+				},
+				"time": "2020-09-20T08:00:44Z"
+			},
+			"next_billing_time": "2020-09-20T08:00:43Z",
+			"final_payment_time": "2020-11-20T10:00:00Z",
+			"failed_payments_count": 0
+		},
+		"links": [
+			{
+				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-M7T16HXWA27J/cancel",
+				"rel": "cancel",
+				"method": "POST",
+				"encType": "application/json"
+			},
+			{
+				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-M7T16HXWA27J",
+				"rel": "edit",
+				"method": "PATCH",
+				"encType": "application/json"
+			},
+			{
+				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-M7T16HXWA27J",
+				"rel": "self",
+				"method": "GET",
+				"encType": "application/json"
+			},
+			{
+				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-M7T16HXWA27J/suspend",
+				"rel": "suspend",
+				"method": "POST",
+				"encType": "application/json"
+			},
+			{
+				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-M7T16HXWA27J/capture",
+				"rel": "capture",
+				"method": "POST",
+				"encType": "application/json"
+			}
+		],
+		"id": "I-M7T16HXWA27J",
+		"plan_id": "P-8U653148NE5673816L5TQXVI",
+		"status": "ACTIVE",
+		"status_update_time": "2020-09-20T08:00:45Z"
+	},
+	"status": "SUCCESS",
+	"links": [
+		{
+			"href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-8GW13668TP983531H-86P59138XM295835R",
+			"rel": "self",
+			"method": "GET",
+			"encType": "application/json"
+		},
+		{
+			"href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-8GW13668TP983531H-86P59138XM295835R/resend",
+			"rel": "resend",
+			"method": "POST",
+			"encType": "application/json"
+		}
+	],
+	"event_version": "1.0",
+	"resource_version": "2.0"
+}
